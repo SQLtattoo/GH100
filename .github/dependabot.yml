@@ -1,10 +1,16 @@
+# Supply-chain maintenance. Dependabot opens PRs, so every update still passes CI
+# and review before it merges; it never changes main directly.
 version: 2
 updates:
+  # Watches package.json and package-lock.json.
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: monthly
+    # Caps concurrent noise, which matters in a classroom repository.
     open-pull-requests-limit: 2
+  # Watches every `uses:` in .github/workflows and .github/actions, and bumps the
+  # pinned SHA together with its version comment, so SHA pinning stays maintainable.
   - package-ecosystem: github-actions
     directory: /
     schedule:

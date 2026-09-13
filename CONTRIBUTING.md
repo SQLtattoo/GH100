@@ -4,7 +4,7 @@ Keep the application explainable in two minutes and the presentation within ten.
 Use Node 22 built-in APIs; do not add a framework or validation dependency without
 discussing it. Tests must be deterministic, offline, and fast.
 
-1. Read [the architecture](docs/architecture.md) and [security policy](SECURITY.md).
+1. Read the [security policy](SECURITY.md).
 2. Change the smallest relevant slice and add meaningful tests under `test`.
 3. Run `npm test`, `npm run lint`, `npm run build`, then `npm run demo:verify`.
 4. Review workflow permissions, shell inputs, immutable action pins, and artifact contents.
@@ -26,5 +26,4 @@ publish. Do not add a local `publish` command or credential-based cloud simulati
 chooses a real account with write access. CODEOWNERS requests reviews; it does not
 enforce approval without appropriate branch/ruleset controls. Never invent a user
 or team in teaching material. Local Git identity is the user's choice; do not
-change global Git configuration. See [the walkthrough](docs/demo-walkthrough.md)
-for an optional staged history.
+change global Git configuration.

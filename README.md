@@ -44,10 +44,6 @@ compatibility differ (upload/download-artifact v4 are not supported on GHES).
 
 ## Open the teaching path
 
-- [Ten-minute walkthrough](docs/demo-walkthrough.md): exact timing, narration, trust boundaries, and local checkpoint commands.
-- [Architecture](docs/architecture.md): orchestration versus runner execution, caches, artifacts, secrets, and OIDC.
-- [Enterprise bridge](docs/enterprise-bridge.md): explanatory governance mappings, not live administration.
-- [Failure fallback](docs/failure-fallback.md): offline rehearsal and honest substitutes for unavailable live evidence.
 - [Course application](src/course-status.mjs) and [one test file](test/course-status.test.mjs).
 - [CI](.github/workflows/ci.yml), [reusable CI](.github/workflows/reusable-ci.yml),
   [local action](.github/actions/course-summary/action.yml), [OIDC explainer](.github/workflows/oidc-explainer.yml),
@@ -66,6 +62,6 @@ GitHub/cloud APIs.
 
 No remote, repository, secret, package, or cloud resource is created by setup.
 Before any live setup, obtain the owner's approval for each operation. The user
-performs sign-in and secret entry themselves. No initial Git history is assumed;
-use the walkthrough's opt-in commands when ready. Generated build and test evidence
-is ignored by Git. The Docker image is data-only, built `FROM scratch`, not runnable.
+performs sign-in and secret entry themselves. No initial Git history is assumed.
+Generated build and test evidence is ignored by Git. The Docker image is data-only,
+built `FROM scratch`, not runnable.

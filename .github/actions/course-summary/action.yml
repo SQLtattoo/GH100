@@ -1,3 +1,6 @@
+# DEMO 4: a composite action packages STEPS. A reusable workflow defines JOBS.
+# This is not a sandbox: these steps run inside the caller's job, on its runner,
+# with the caller's token. Grouping is for reuse and readability, not isolation.
 name: Course summary
 description: Write a validated test count into the current runner job summary
 inputs:
@@ -9,11 +12,16 @@ runs:
   steps:
     - name: Write the summary
       shell: bash
+      # The input is bound to an env var rather than interpolated into the script.
+      # A ${{ }} expression pasted into `run` would be substituted before bash sees
+      # it, so attacker-controlled text could become executable shell.
       env:
         TEST_COUNT: ${{ inputs.test-count }}
       run: |
+        # Validate before use: never trust an input just because it came from a job output.
         if [[ ! "$TEST_COUNT" =~ ^[0-9]+$ ]]; then
           echo 'Expected a numeric test count.' >&2
           exit 1
         fi
+        # $GITHUB_STEP_SUMMARY renders markdown on the run page, replacing log-scraping.
         printf '### Course CI\n\nTests passed: %s\n\nReusable workflow output received.\n' "$TEST_COUNT" >> "$GITHUB_STEP_SUMMARY"

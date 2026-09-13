@@ -1,3 +1,7 @@
+/**
+ * Summarizes course completion statistics from a validated course object.
+ * Pure function with no external I/O or state mutations.
+ */
 export function summarizeCourse(course) {
   if (!course || typeof course.title !== 'string' || !course.title.trim()) {
     throw new TypeError('A non-empty course title is required.');
@@ -18,6 +22,9 @@ export function summarizeCourse(course) {
   };
 }
 
+/**
+ * Formats a course summary object into a single human-readable status sentence.
+ */
 export function formatSummary(summary) {
   return `${summary.title}: ${summary.completed}/${summary.total} modules complete (${summary.percent}%).`;
 }

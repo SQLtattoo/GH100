@@ -4,5 +4,4 @@
 # /.github/workflows/
 # /.github/actions/
 # /scripts/
-# /docs/
 # CODEOWNERS alone does not enforce approval; branch rules must require it.

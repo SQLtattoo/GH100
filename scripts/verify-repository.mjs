@@ -9,8 +9,7 @@ const required = ['package.json', 'package-lock.json', '.gitignore', 'LICENSE', 
   'SECURITY.md', 'CONTRIBUTING.md', 'CODEOWNERS', 'Dockerfile', '.dockerignore',
   '.github/dependabot.yml', '.github/workflows/ci.yml', '.github/workflows/reusable-ci.yml',
   '.github/workflows/package.yml', '.github/workflows/oidc-explainer.yml',
-  '.github/actions/course-summary/action.yml', 'docs/architecture.md', 'docs/demo-walkthrough.md',
-  'docs/enterprise-bridge.md', 'docs/failure-fallback.md', 'scripts/demo-reset.ps1', 'scripts/demo-verify.ps1'];
+  '.github/actions/course-summary/action.yml', 'scripts/demo-reset.ps1', 'scripts/demo-verify.ps1'];
 for (const path of required) assert(existsSync(path), `Missing required file: ${path}`);
 const patterns = [
   /gh[pousr]_[A-Za-z0-9]{20,}/,

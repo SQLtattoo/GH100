@@ -1,18 +1,23 @@
+# DEMO 8: packaging with the publish path guarded. Default behaviour is a dry run.
 name: Package demonstration
 
+# Manual only. Nothing here can be triggered by a push or a pull request.
 on:
   workflow_dispatch:
     inputs:
       publish:
         description: Explicitly publish to GHCR (main, non-fork repositories only)
         type: boolean
+        # Safe by default: a distracted click archives, it does not release.
         default: false
         required: true
 
+# No packages: write here. Only the one job that needs it declares it.
 permissions:
   contents: read
 
 jobs:
+  # Builds and archives. Never authenticates to a registry, whatever `publish` says.
   archive:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -32,6 +37,7 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm test
       - run: npm run build
+      # A data-only `FROM scratch` image: it carries the summary, it is not a service.
       - name: Build a data-only OCI-compatible image archive
         run: |
           mkdir -p artifacts/package
@@ -40,6 +46,7 @@ jobs:
       - name: Explain the dry run
         if: inputs.publish == false
         run: echo 'Dry run complete. Image archived; no registry login or push.' >> "$GITHUB_STEP_SUMMARY"
+      # The tar leaves as a run artifact, which is storage, not a registry package.
       - name: Upload package archive
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -48,15 +55,19 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
+  # The only job that can write a package, isolated so its permission cannot leak
+  # into building or testing. All four guards must hold before it is even scheduled.
   publish:
     needs: archive
     if: github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/main' && github.event.repository.fork == false
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Narrowest scope that can push to GHCR; still no write access to repository contents.
     permissions:
       contents: read
       packages: write
     steps:
+      # Publishes exactly the artifact this run built; it never rebuilds from source.
       - name: Download this run's archive
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -73,6 +84,8 @@ jobs:
           image="ghcr.io/${REPOSITORY,,}/course-status:${COMMIT_SHA}-${RUN_ID}-${RUN_ATTEMPT}"
           docker tag course-status:demo "$image"
           echo "COURSE_IMAGE=$image" >> "$GITHUB_ENV"
+      # The job's built-in GITHUB_TOKEN, not a PAT. --password-stdin keeps it off the
+      # process list, and the `if` repeats the opt-in at step level as defence in depth.
       - name: Authenticate only after explicit publish opt-in
         if: inputs.publish == true
         env:
@@ -82,6 +95,7 @@ jobs:
       - name: Publish only after explicit opt-in
         if: inputs.publish == true
         run: docker push "$COURSE_IMAGE"
+      # `always()` so credentials are dropped even when an earlier step fails.
       - name: Remove runner registry authentication
         if: always()
         run: docker logout ghcr.io

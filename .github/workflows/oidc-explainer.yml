@@ -1,8 +1,12 @@
+# DEMO 7: explanation only. This workflow requests no token and calls no cloud.
 name: OIDC architecture only
 
+# Manual only: there is no reason for this to run on every push.
 on:
   workflow_dispatch:
 
+# `id-token: write` permits ASKING GitHub for a signed identity token.
+# It grants zero cloud access by itself, and is omitted everywhere it is not needed.
 permissions:
   contents: read
   id-token: write

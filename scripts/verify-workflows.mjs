@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const documents = JSON.parse(readFileSync(0, 'utf8'));
+/** Returns the parsed workflow object for a given workflow file name. */
 const workflow = (name) => documents[`.github/workflows/${name}.yml`];
+/** Returns sorted property keys for deterministic comparison. */
 const keys = (value) => Object.keys(value).sort();
 const readOnly = { contents: 'read' };
 const pinnedAction = /^[\w-]+\/[\w-]+@[a-f0-9]{40}$/;

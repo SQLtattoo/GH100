@@ -1,6 +1,9 @@
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
+/**
+ * Recursively scans and collects repository files, excluding build/cache artifacts.
+ */
 export async function repositoryFiles(directory = '.') {
   const ignored = new Set(['.git', '.vscode', 'node_modules', 'dist', 'artifacts', 'coverage']);
   const result = [];
