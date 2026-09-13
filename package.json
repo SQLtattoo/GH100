@@ -1,0 +1,17 @@
+{
+  "name": "gh100-course-status",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deterministic GH-100 instructor demonstration",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node scripts/lint.mjs",
+    "build": "node scripts/build.mjs",
+    "demo:verify": "pwsh -NoProfile -File scripts/demo-verify.ps1"
+  },
+  "exports": "./src/course-status.mjs",
+  "files": ["src", "dist", "README.md", "LICENSE"],
+  "license": "MIT"
+}

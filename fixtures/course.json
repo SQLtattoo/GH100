@@ -1,0 +1,9 @@
+{
+  "title": "GH-100 GitHub Administration",
+  "modules": [
+    { "name": "Repository foundations", "complete": true },
+    { "name": "Actions and trust boundaries", "complete": true },
+    { "name": "Credential and package governance", "complete": false },
+    { "name": "Enterprise controls", "complete": false }
+  ]
+}
