@@ -68,8 +68,9 @@ and publishing. The npm project is private and has no publish script or lifecycl
 hooks. Local rehearsal never invokes Docker, authenticates, publishes, or contacts
 GitHub/cloud APIs.
 
-No remote, repository, secret, package, or cloud resource is created by setup.
-Before any live setup, obtain the owner's approval for each operation. The user
-performs sign-in and secret entry themselves. No initial Git history is assumed.
+This prepared copy is connected to the public `SQLtattoo/GH100` repository and has
+local Git history. Local rehearsal creates no additional remote, secret, package, or
+cloud resource. Before any live change, obtain the owner's approval for each
+operation. The user performs sign-in and any secret entry themselves.
 Generated build and test evidence is ignored by Git. The Docker image is data-only,
 built `FROM scratch`, not runnable.
