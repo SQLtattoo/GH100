@@ -52,7 +52,7 @@ jobs:
         id: tests
         run: node scripts/run-ci-tests.mjs
       - run: npm run build
-      # DEMO 5: artifacts persist run output after the ephemeral runner is destroyed.
+      # DEMO 5: artifacts persist run output after the job's runner workspace is gone.
       # Uploading one needs no write permission and is not a published package.
       - name: Upload the course build
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

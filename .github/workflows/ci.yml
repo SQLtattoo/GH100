@@ -36,7 +36,8 @@ jobs:
     permissions:
       contents: read
     steps:
-      # Each job starts on an empty VM, so a local action must be checked out before use.
+      # A separate job does not inherit another job's workspace, so the local action
+      # must be checked out before use.
       - name: Check out the local action
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
