@@ -1,0 +1,19 @@
+name: Course summary
+description: Write a validated test count into the current runner job summary
+inputs:
+  test-count:
+    description: Number of tests executed by the reusable workflow
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Write the summary
+      shell: bash
+      env:
+        TEST_COUNT: ${{ inputs.test-count }}
+      run: |
+        if [[ ! "$TEST_COUNT" =~ ^[0-9]+$ ]]; then
+          echo 'Expected a numeric test count.' >&2
+          exit 1
+        fi
+        printf '### Course CI\n\nTests passed: %s\n\nReusable workflow output received.\n' "$TEST_COUNT" >> "$GITHUB_STEP_SUMMARY"
