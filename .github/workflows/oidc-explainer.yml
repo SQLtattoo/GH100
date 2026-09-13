@@ -1,0 +1,28 @@
+name: OIDC architecture only
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  explain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Explain federation without requesting a token
+        shell: bash
+        run: |
+          cat <<'SUMMARY' >> "$GITHUB_STEP_SUMMARY"
+          ### Stored secret to OIDC: architecture only
+          - `id-token: write` only allows requesting a GitHub OIDC token; it grants no cloud access.
+          - The cloud trust policy decides whether that identity may access cloud resources.
+          - Constrain trust to the repository, workflow/ref or environment, and audience.
+          - Short-lived federation replaces a stored cloud credential.
+          - This job does not request an OIDC token and does not contact Azure or any cloud provider.
+          SUMMARY
