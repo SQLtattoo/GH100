@@ -49,6 +49,14 @@ compatibility differ (upload/download-artifact v4 are not supported on GHES).
   [local action](.github/actions/course-summary/action.yml), [OIDC explainer](.github/workflows/oidc-explainer.yml),
   and [package workflow](.github/workflows/package.yml).
 
+## Take these with you
+
+- [Best practices cheatsheet](BEST-PRACTICES-CHEATSHEET.md) — every practice the course
+  recommends in one place, the twenty things people most often get backwards, and the
+  areas that change often enough that you should look them up rather than memorise them.
+- [Current GitHub references](REFERENCES.md) — the official documentation links behind the
+  cheatsheet, grouped by topic, for checking anything volatile.
+
 ## Safe defaults
 
 Push/PR CI has read-only repository permissions and no secret-consuming step.
