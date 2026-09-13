@@ -3,7 +3,12 @@
 A ten-minute instructor demonstration for a one-day GitHub Administration course.
 Four modules, two completed, ten fast tests, zero application dependencies.
 
-## Rehearse locally
+> **Disclaimer:** This repository is provided for learning and demonstration purposes.
+> Product behavior, course content, and documentation can change. Always verify the
+> latest information in [Microsoft Learn](https://learn.microsoft.com/) and the official
+> product documentation collected in [REFERENCES.md](REFERENCES.md).
+
+## Local verification
 
 ```powershell
 npm run demo:verify
@@ -28,7 +33,7 @@ Expected application output:
 GH-100 GitHub Administration: 2/4 modules complete (50%).
 ```
 
-## Choose your account
+## Account and repository requirements
 
 **A personal GitHub Free account and a public repository you own are sufficient.**
 No Enterprise account, organization administrator, Azure subscription, PAT, or
@@ -42,20 +47,19 @@ does not grant settings access. This demo does not require bypassing those polic
 GitHub Enterprise Server is not the target: runner availability and artifact action
 compatibility differ (upload/download-artifact v4 are not supported on GHES).
 
-## Open the teaching path
+## Demonstration components
 
 - [Course application](src/course-status.mjs) and [one test file](test/course-status.test.mjs).
 - [CI](.github/workflows/ci.yml), [reusable CI](.github/workflows/reusable-ci.yml),
   [local action](.github/actions/course-summary/action.yml), [OIDC explainer](.github/workflows/oidc-explainer.yml),
   and [package workflow](.github/workflows/package.yml).
 
-## Take these with you
+## Supporting documentation
 
-- [Best practices cheatsheet](BEST-PRACTICES-CHEATSHEET.md) — every practice the course
-  recommends in one place, the twenty things people most often get backwards, and the
-  areas that change often enough that you should look them up rather than memorise them.
-- [Current GitHub references](REFERENCES.md) — the official documentation links behind the
-  cheatsheet, grouped by topic, for checking anything volatile.
+- [Best practices cheatsheet](BEST-PRACTICES-CHEATSHEET.md) — the practices demonstrated
+  in the course, common misconceptions, and areas that require current documentation.
+- [Current GitHub references](REFERENCES.md) — the authoritative source list for this
+  repository, grouped by topic for verifying volatile GitHub details.
 
 ## Safe defaults
 
