@@ -1,0 +1,87 @@
+name: Package demonstration
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Explicitly publish to GHCR (main, non-fork repositories only)
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Use Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - name: Build a data-only OCI-compatible image archive
+        run: |
+          mkdir -p artifacts/package
+          docker build --tag course-status:demo .
+          docker save course-status:demo --output artifacts/package/course-status.tar
+      - name: Explain the dry run
+        if: inputs.publish == false
+        run: echo 'Dry run complete. Image archived; no registry login or push.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload package archive
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: course-package
+          path: artifacts/package/course-status.tar
+          if-no-files-found: error
+          retention-days: 3
+
+  publish:
+    needs: archive
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/main' && github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download this run's archive
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: course-package
+          path: artifacts/package
+      - name: Load and tag the data-only image
+        env:
+          REPOSITORY: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          docker load --input artifacts/package/course-status.tar
+          image="ghcr.io/${REPOSITORY,,}/course-status:${COMMIT_SHA}-${RUN_ID}-${RUN_ATTEMPT}"
+          docker tag course-status:demo "$image"
+          echo "COURSE_IMAGE=$image" >> "$GITHUB_ENV"
+      - name: Authenticate only after explicit publish opt-in
+        if: inputs.publish == true
+        env:
+          NODEFAULT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY_USER: ${{ github.actor }}
+        run: printf '%s' "$NODEFAULT_TOKEN" | docker login ghcr.io --username "$REGISTRY_USER" --password-stdin
+      - name: Publish only after explicit opt-in
+        if: inputs.publish == true
+        run: docker push "$COURSE_IMAGE"
+      - name: Remove runner registry authentication
+        if: always()
+        run: docker logout ghcr.io

@@ -1,0 +1,8 @@
+# Deliberately inactive: no real GitHub owner was provided.
+# Before teaching review requests, the repository owner may add their actual
+# GitHub username with write access to rules covering these paths:
+# /.github/workflows/
+# /.github/actions/
+# /scripts/
+# /docs/
+# CODEOWNERS alone does not enforce approval; branch rules must require it.
